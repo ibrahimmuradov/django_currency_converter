@@ -4,7 +4,7 @@ import json
 from django.http import JsonResponse
 
 def index(request):
-    country_codes_api = 'https://v6.exchangerate-api.com/v6/2a5444454f5910645d3a6a8e/codes'
+    country_codes_api = 'https://v6.exchangerate-api.com/v6/YOUR_API_KEY/codes'
     data = {}
 
     if request.method == "POST":
