@@ -9,8 +9,10 @@ I used Jinja template engine as template language in the project. I made the bac
 
 ## Installation
 
+```bash
 git clone https://github.com/ibrahimmuradov/django_morgan_blog.git .
 pip install -r requirements.txt
 django-admin startproject core . 
 py manage.py migrate
 py manage.py runserver
+```
