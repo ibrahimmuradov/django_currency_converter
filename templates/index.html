@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Currency Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<style>
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.currency-row-outer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.currency-converter {
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+input,
+select {
+    color: #363636;
+    font-size: 1rem;
+    height: 2.3em;
+    border-radius: 4px;
+    max-width: 100%;
+    width: calc(100% - 15px);
+    margin: auto;
+    outline: 0;
+    background: #fff;
+    border-color: #dbdbdb;
+    padding-left: 15px;
+    border: 1px solid #00000057;
+    box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
+    -webkit-appearance: none;
+}
+
+.field.grid-50-50 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
+}
+
+.currency-converter .colmun {
+    margin-bottom: 15px;
+}
+
+select.currency {
+    border-color: #3273dc;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    font-size: 1em;
+    max-width: 100%;
+    outline: 0;
+    display: block;
+}
+
+.currency-converter .select {
+    position: relative;
+    height: 100%;
+}
+
+h2 {
+    padding-bottom: 30px;
+}
+
+.currency-converter .select:after {
+    transform: rotate(-45deg);
+    transform-origin: center;
+    content: "";
+    border: 3px solid rgba(0, 0, 0, 0);
+    border-radius: 2px;
+    border-top: 0;
+    border-right: 0;
+    display: block;
+    height: 0.525em;
+    width: 0.525em;
+    z-index: 4;
+    position: absolute;
+    top: 50%;
+    right: 1.125em;
+    margin-top: -0.4375em;
+}
+
+.select:not(:hover)::after {
+    border-color: #3273dc;
+}
+
+.select:hover::after {
+    border-color: #363636;
+}
+</style>
+
+<body>
+  <div class="currency-row-outer">
+    <div class="currency-converter">
+      <h2>Currency Converter</h2>
+
+      <form method="post">
+
+        <div class="field grid-50-50">
+          <div class="colmun col-left">
+            <input type="number" class="form-input" id="amount" placeholder="00000" required>
+          </div>
+          <div class="colmun col-right">
+            <div class="select">
+              <select name="firstCurrency" id="firstCurrency" class="currency">
+                {% for code in codes %}
+                  <option value="{{code|first}}">{{code | slice:"1:2" | first }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field grid-50-50">
+          <div class="colmun col-left">
+            <input type="text" class="form-input" id="output" placeholder="00000" disabled>
+          </div>
+          <div class="colmun col-right">
+            <div class="select">
+              <select name="secondCurrency" id="secondCurrency" class="currency">
+                {% for code in codes %}
+                  <option value="{{code|first}}">{{code | slice:"1:2" | first }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" onClick="Convert();" class="btn btn-success">Convert</button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    function Convert(){
+
+      $.ajax({
+        type: "POST",
+        url: '{% url 'converter:index' %}',
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: "post",
+          amount: $('#amount').val(),
+          firstCurrency: $('#firstCurrency').val(),
+          secondCurrency: $('#secondCurrency').val()
+        },
+        success: function (response) {
+          if (response.success){
+            console.log(response.result_convert)
+            $('#output').val(response.result_convert);
+          }
+        },
+        error: function (xhr, errmsg, err) {},
+      });
+
+    };
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
