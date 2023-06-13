@@ -4,7 +4,7 @@ import json
 from django.http import JsonResponse
 
 def index(request):
-    country_codes_api = 'https://v6.exchangerate-api.com/v6/abe1b036f037ca2b7282affa/codes'
+    country_codes_api = 'https://v6.exchangerate-api.com/v6/YOUR_API_KEY/codes'
     data = {}
 
     if request.method == "POST":
@@ -12,7 +12,7 @@ def index(request):
         second_currency = request.POST.get('secondCurrency')
         amount = float(request.POST.get('amount'))
 
-        convert_api = f'https://v6.exchangerate-api.com/v6/abe1b036f037ca2b7282affa/pair/{first_currency}/{second_currency}/'
+        convert_api = f'https://v6.exchangerate-api.com/v6/YOUR_API_KEY/pair/{first_currency}/{second_currency}/'
 
         get_response = requests.get(convert_api).text
         # get api response data
