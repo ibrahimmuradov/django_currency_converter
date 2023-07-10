@@ -10,7 +10,7 @@ I made the backend with Python's Django framework and used jquery in the fronten
 ## Installation
 
 ```bash
-git clone https://github.com/ibrahimmuradov/django_morgan_blog.git .
+git clone https://github.com/ibrahimmuradov/django_currency_converter.git .
 pip install -r requirements.txt
 django-admin startproject core . 
 py manage.py migrate
